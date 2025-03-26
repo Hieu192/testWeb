@@ -3,11 +3,12 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 const port = 3000;
+require('dotenv').config();
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: '*',
     credentials: true
 }));
 

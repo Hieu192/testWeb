@@ -32,12 +32,11 @@ exports.createUser = async (req, res, next) => {
     });
 }
 async function getUsers (req, res, next) {
-    const range = "Users!A2:C"; // Lấy dữ liệu từ cột A đến C, bắt đầu từ dòng 2
+    const range = "Users!A2:D"; 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: sheetId,
       range,
     });
-  
     const rows = response.data.values;
     if (!rows.length) {
       console.log("Không có dữ liệu!");
@@ -45,14 +44,22 @@ async function getUsers (req, res, next) {
     }
   
     return rows.map((row) => ({
-      name: row[0],
-      sdt: row[1],
-      mssv: row[2],
+      id: row[0],
+      mssv: row[1],
+      name: row[2],
+      phone: row[3],
     }));
   }
   
 exports.getUserDetails = async (req, res, next) => {
     console.log("test:::", req.params.mssv);
     const users = await getUsers();
-    return users.find((user) => user.mssv === req.params.mssv);
+    console.log(users);
+    const findUser = users.filter((user) => user.mssv === req.params.mssv);
+    console.log("findUser:::", findUser);
+    return res.status(201).json({
+      success: true,
+      message: "User find successfully",
+      user: findUser[0]
+  });
 }
