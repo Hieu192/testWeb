@@ -9,7 +9,7 @@ function App() {
   const fetchStudentInfo = async () => {
     try {
       setError(null);
-      const response = await fetch(`http://localhost:3000/api/v1/user/${mssv}`, {
+      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/sheet/${mssv}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -43,7 +43,7 @@ function App() {
         <div className="border p-4 rounded">
           <p><strong>MSSV:</strong> {student.mssv}</p>
           <p><strong>Họ tên:</strong> {student.name}</p>
-          <p><strong>SDT:</strong> {student.sdt}</p>
+          <p><strong>SDT:</strong> {student.phone}</p>
         </div>
       )}
     </div>

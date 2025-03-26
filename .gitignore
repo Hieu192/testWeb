@@ -1,2 +1,3 @@
 backend/configKeyGGSheet.json
 backend/.env
+frontend/.env
