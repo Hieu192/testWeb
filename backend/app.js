@@ -8,8 +8,12 @@ require('dotenv').config();
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
-    origin: '*',
-    credentials: true
+    origin: (origin, callback) => {
+        callback(null, origin || '*'); // Chấp nhận tất cả origin
+    },
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
 
 // app.get("/", (req, res) => {
