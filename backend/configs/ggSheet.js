@@ -2,8 +2,6 @@
 const { google } = require("googleapis");
 const credentials = require("../configKeyGGSheet.json");
 
-
-
 const auth = new google.auth.GoogleAuth({
     credentials,
     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
