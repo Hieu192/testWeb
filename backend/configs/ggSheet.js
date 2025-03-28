@@ -17,10 +17,14 @@ const credentials = {
 
 const auth = new google.auth.GoogleAuth({
     credentials,
-    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+    scopes: [
+      "https://www.googleapis.com/auth/drive.file",
+      "https://www.googleapis.com/auth/spreadsheets"
+    ],
   });
 
 const sheetId = process.env.SHEET_ID;
 const sheets = google.sheets({ version: "v4", auth });
+const drive = google.drive({ version: 'v3', auth });
 
-module.exports = { sheets, sheetId };
+module.exports = { sheets, sheetId, drive };
