@@ -39,7 +39,30 @@ async function uploadFileToDrive(filePath, fileName, mimeType) {
   return publicUrl;
 }
 
+async function isDuplicateMssvOrPhone(mssv, phone) {
+  const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: sheetId,
+      range: "Users!B:D", // Đọc dữ liệu từ cột B đến D
+  });
+
+  const rows = response.data.values || [];
+
+  // Kiểm tra xem mssv hoặc phone đã tồn tại trong dữ liệu chưa
+  return rows.some(row => row[2] === mssv || row[4] === phone);
+}
 exports.createUser = async (req, res, next) => {
+    // Viết hàm kiểm tra xem có mssv với sdt có trùng với trong ggsheet hay không
+    // Nếu có thì trả về lỗi 400
+    // Nếu không thì thêm mới vào ggsheet
+    // const { mssv, name, phone } = req.body;
+    if (!mssv || !phone) {
+        throw new BadRequestError("Missing required fields");
+    }
+    const isDuplicate = await isDuplicateMssvOrPhone(mssv, phone);
+    if (isDuplicate) {
+        return res.status(400).json({ success: false, message: "MSSV hoặc số điện thoại đã tồn tại" });
+    }
+
     const newId = uuidv4();
     let imageLinks = [];
     console.log("req.files:::", req.files);
@@ -113,3 +136,4 @@ exports.getUserDetails = async (req, res, next) => {
       user: findUser
   });
 }
+
