@@ -5,6 +5,7 @@ const FormInput = () => {
   const [data, setData] = useState({ mssv: "", name: "", phone: ""});
   const [images, setImages] = useState([]);
   const [previewUrls, setPreviewUrls] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -27,6 +28,7 @@ const FormInput = () => {
   }, [previewUrls]);
 
   const handleSubmit = async (e) => {
+    setLoading(true); // Bắt đầu hiển thị trạng thái loading
     e.preventDefault();
     try {
       // Tạo đối tượng FormData để gửi dữ liệu dạng multipart/form-data
@@ -59,6 +61,8 @@ const FormInput = () => {
 
       alert("Lỗi khi lưu dữ liệu: " + errorMessage);
       console.error("Lỗi chi tiết:", error);
+    } finally {
+      setLoading(false); // Tắt trạng thái loading sau khi hoàn thành
     }
   };
 
@@ -107,7 +111,7 @@ const FormInput = () => {
           ))}
         </div>
       )}
-      <button type="submit" className="bg-blue-600 text-white p-2">Gửi</button>
+      <button type="submit" disabled={loading} className="bg-blue-600 text-white p-2">{loading ? "Đang gửi..." : "Gửi"}</button>
     </form>
   );
 };
