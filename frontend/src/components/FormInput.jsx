@@ -96,6 +96,7 @@ const FormInput = () => {
         type="file" 
         name="images" 
         multiple 
+        accept="image/*" // Chỉ cho phép chọn file ảnh
         onChange={handleFileChange} 
         className="border p-2 w-full mb-2"
       />
