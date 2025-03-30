@@ -48,15 +48,16 @@ async function isDuplicateMssvOrPhone(mssv, phone) {
   const rows = response.data.values || [];
 
   // Kiểm tra xem mssv hoặc phone đã tồn tại trong dữ liệu chưa
-  return rows.some(row => row[2] === mssv || row[4] === phone);
+  return rows.some(row => row[1] === mssv || row[3] === phone);
 }
+
 exports.createUser = async (req, res, next) => {
     // Viết hàm kiểm tra xem có mssv với sdt có trùng với trong ggsheet hay không
     // Nếu có thì trả về lỗi 400
     // Nếu không thì thêm mới vào ggsheet
     // const { mssv, name, phone } = req.body;
     if (!mssv || !phone) {
-        throw new BadRequestError("Missing required fields");
+      return res.status(400).json({ success: false, message: "mssv và phone không được để trống " });
     }
     const isDuplicate = await isDuplicateMssvOrPhone(mssv, phone);
     if (isDuplicate) {
