@@ -100,7 +100,7 @@ exports.createUser = async (req, res, next) => {
     });
 }
 async function getUsers (req, res, next) {
-    const range = "Users!A2:D"; 
+    const range = "Users!A2:E"; 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: sheetId,
       range,
@@ -116,6 +116,8 @@ async function getUsers (req, res, next) {
       mssv: row[1],
       name: row[2],
       phone: row[3],
+      image: row[4] ? row[4].split(", ") : [], // Chuyển đổi chuỗi thành mảng
+      // Nếu có nhiều hình ảnh, bạn có thể tách chúng bằng dấu phẩy và chuyển đổi thành mảng
     }));
   }
   
