@@ -5,8 +5,6 @@ const FormInput = () => {
   const [data, setData] = useState({ mssv: "", name: "", phone: ""});
   const [images, setImages] = useState([]);
   const [previewUrls, setPreviewUrls] = useState([]);
-  console.log("data", data);
-  console.log("images", images);
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -35,18 +33,12 @@ const FormInput = () => {
       const formData = new FormData();
       // Append các trường text
       for (const key in data) {
-        console.log("key", key);
-        console.log("data[key]", data[key]);
         formData.append(key, data[key]);
-        console.log("formData", formData);
       }
       // Append từng file hình ảnh vào FormData, dùng key 'images'
       images.forEach((file) => {
         formData.append("images", file);
       });
-      for (let pair of formData.entries()) {
-        console.log("test vip::",pair[0] + ': ' + pair[1]);
-      }
       // Gọi API với axios
       await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/sheet`, formData, {
         headers: {
@@ -55,7 +47,18 @@ const FormInput = () => {
       });
       alert("Dữ liệu đã được lưu!");
     } catch (error) {
-      alert("Lỗi khi lưu dữ liệu: " + error.message);
+          // Lấy thông báo lỗi từ backend
+      let errorMessage = "Lỗi không xác định!";
+      if (error.response) {
+        errorMessage = error.response.data.message || error.response.statusText;
+      } else if (error.request) {
+        errorMessage = "Không thể kết nối đến server!";
+      } else {
+        errorMessage = error.message;
+      }
+
+      alert("Lỗi khi lưu dữ liệu: " + errorMessage);
+      console.error("Lỗi chi tiết:", error);
     }
   };
 
